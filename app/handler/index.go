@@ -2,17 +2,16 @@ package handler
 
 import (
 	"net/http"
-	"simple-ctftime-bot/app/context"
+	"simple-ctftime-bot/app/content"
 )
 
 // IndexHandler will handle all request match the URL
 type IndexHandler struct {
-	context *context.AppContext
 }
 
-// BuildIndexHandler return IndexHandler struct
-func BuildIndexHandler(context *context.AppContext) *IndexHandler {
-	return &IndexHandler{context: context}
+// BuildIndexHandler creates IndexHandler struct
+func BuildIndexHandler(content *content.AppContent) *IndexHandler {
+	return &IndexHandler{}
 }
 
 // Welcome is index page

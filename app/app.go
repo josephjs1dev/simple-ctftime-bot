@@ -6,21 +6,21 @@ import (
 	"os"
 	"strconv"
 
-	"simple-ctftime-bot/app/context"
+	"simple-ctftime-bot/app/content"
 
 	"github.com/gorilla/handlers"
 )
 
 func main() {
-	context, err := context.InitializeAppContext()
+	content, err := content.InitializeAppContent()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	config := context.Config
+	config := content.Config
 	addr := config.Host + ":" + strconv.Itoa(config.Port)
 
-	r := GetApplicationRouter(context)
+	r := GetApplicationRouter(content)
 	router := handlers.LoggingHandler(os.Stdout, r)
 
 	log.Println("listen on", addr)

@@ -1,12 +1,12 @@
-package context
+package content
 
 import (
 	"simple-ctftime-bot/app/config"
 	"simple-ctftime-bot/app/line"
 )
 
-// AppContext is used to as our application context that has information about config, etc. that's used by many functionalities
-type AppContext struct {
+// AppContent is used to as our application's content that has information about config, etc. that's used by many functionalities
+type AppContent struct {
 	ConfigService *config.Service
 	Config        config.Config
 	Line          line.BotClient
@@ -20,8 +20,8 @@ func initializeLineBot(config config.Config) (line.BotClient, error) {
 	return line.InitializeBot(config)
 }
 
-// InitializeAppContext runs initialization of our application's context
-func InitializeAppContext() (*AppContext, error) {
+// InitializeAppContent runs initialization of our application's context
+func InitializeAppContent() (*AppContent, error) {
 	configService, err := initializeConfig()
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func InitializeAppContext() (*AppContext, error) {
 	config := configService.GetConfig()
 	line, err := initializeLineBot(*config)
 
-	return &AppContext{
+	return &AppContent{
 		ConfigService: configService,
 		Config:        *config,
 		Line:          line,
