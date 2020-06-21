@@ -13,3 +13,17 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Application specific
+.env
+
+# IDE config
+.vscode
+.idea
+
+# Coverage
+coverage.txt
+
+# Output folder
+bin/*
+!bin/.gitkeep

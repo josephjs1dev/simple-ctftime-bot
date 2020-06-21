@@ -1,0 +1,24 @@
+language: go
+go:
+- 1.14.3
+dist: xenial
+os: linux
+
+jobs:
+  include:
+    - stage: test
+      script: 
+        - go test ./... -v -race -coverprofile=coverage.txt -covermode=atomic
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
+    - stage: deploy
+      if: branch = master
+      strategy: api
+      provider: heroku
+      api_key:
+        secure: LV8PcqeUqJ0M0LKqY4R/DraKekhc+Whx+P/iMpwtzq+Skd+yc5eOhbo0oooAj/nistu2ZeGZiaNGHJfCAiJpByNXmipajBe0WteBzbhFJZA8d2NaVz4nytNFoy5ztXtRJ5z4bb80p7ZmOzZgw3V/N+3FMsxwwIccWmF0eSSCOaOQxyejybKE9GOqhaYdp8vZ3BZl2dXduO9FHU7K9YLwMJabhNjIg4zMYhfbJXigE6BI5yeEv5OaeAohELrsEkg2KtuewChXdRJfyExH+yPVCY/t7BJhK/y21f2NWU8oyZ0ee67Eav8WyT8EGqYciqy7Q45ZGhvColmjAzkREodipkCIHtMiLlqGF4eAeg5MK6ObtIeYaErycmWtXd7vSF21o3w6WBUJ4FLMlGClWagWExhWgZPepm/bymlHhzCnipWtPMhoOs1BeVMuVES2WHpbBOZwI1ifzdW/n2TTHP9igwzrUhg679upjok4h2XTaAG7JSbcwWpumKbomkFKEpUhZb27j2N1l9BglpDkvA5FGFoawCMnGDqzUG9+wtHv5VmrR9m6Nh+IhC8aOiTYIQQpLqES3gKNdBlBKP6iVt0EXQn5Umm+LsqbNdcN3JBdyVmsNtea5mCai0GLAnXZ9WW+sRct6v8+ZVYtnM1SL31V1diNBjxz83CGKXL4vEqKpzU=
+      app: simple-ctftime-bot
+
+env:
+  global:
+    secure: LN3fEd0DBLA8mUaEqoKm84TQ88ejgxQFSKZUwZI70l0bVrjB+4t+Mda53dKTqB13iPCPlBgfYZ33CD11nJtPd92OLab4g7DcSj9kU1/peEx/KuSSt2QOok9FpOWfzUk8BYU3w4bl2IHpwPjCFQhLDoL7an3etLccbCVu3HwyCHn3NZxFI6ZsRElV2S385gc56+/vTT4DKI8RqnH8WXqjfF8wPwr+5VY5xi0gz8jcpq0hG7q6fO1/9Ao9v0wLSYAknSyiN1fNthjWlAfw9G/NoVlmcCXkXO98d1cut6R/fgglR99gaa9Y0+3Ke4B1NZvfLMQcw/JOycr/HUb7Yz147pySalRj3Y7sHRrwo4hNuKWPfAKi2d/29gdHBSODcP2guUez8wwRz8McyPQh1FFmdrqc1eh7DJL6wWM/U14pnrdsp2s/hLrRgcEebzYJIpJThlYiUdlFe1WSeLIbrdDVu4nSIeRgm7wGPOzcz1D5XjeJLR9RhEgZuGJLBfRbCMWYrvOqmJ0LOV7bL6DvB/05+pweLx2zf7oIFP9EfkIwlBVq+AJkMQcqnskPuqOYDQ6/1i3EaK2wZLKrp5uu7pkMeLFqnVeRa5OUg1Yh7lyx1uE9U9eGWtsGtfe/5TNXUyAZTcocZ5FKlFJYaRCSEUY2CZIb88edmuHtXsJdELOSndQ=
