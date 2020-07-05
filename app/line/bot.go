@@ -1,4 +1,4 @@
-package line
+package appline
 
 import (
 	"net/http"
@@ -9,8 +9,8 @@ import (
 
 // BotClient mimics line-bot-sdk-go Client
 type BotClient interface {
-	ParseRequest(r *http.Request) ([]*linebot.Event, error)
-	ReplyMessage(replyToken string, messages ...linebot.SendingMessage) BotPushMessageCall
+	ParseRequest(*http.Request) ([]*linebot.Event, error)
+	ReplyMessage(string, ...linebot.SendingMessage) BotPushMessageCall
 }
 
 // BotPushMessageCall mimics line-bot-sdk-go ReplyMessageCall
@@ -24,17 +24,17 @@ type AppBot struct {
 }
 
 // ParseRequest will call line-bot-sdk-go client's ParseRequest
-func (bot AppBot) ParseRequest(r *http.Request) ([]*linebot.Event, error) {
+func (bot *AppBot) ParseRequest(r *http.Request) ([]*linebot.Event, error) {
 	return bot.client.ParseRequest(r)
 }
 
 // ReplyMessage will call line-bot-sdk-go client's ReplyMessage
-func (bot AppBot) ReplyMessage(replyToken string, messages ...linebot.SendingMessage) BotPushMessageCall {
+func (bot *AppBot) ReplyMessage(replyToken string, messages ...linebot.SendingMessage) BotPushMessageCall {
 	return bot.client.ReplyMessage(replyToken, messages...)
 }
 
 // InitializeBot initiate line-bot-sdk-go client
-func InitializeBot(config config.Config) (BotClient, error) {
+func InitializeBot(config *config.Config) (BotClient, error) {
 	client, err := linebot.New(
 		config.ChannelSecret,
 		config.ChannelToken,

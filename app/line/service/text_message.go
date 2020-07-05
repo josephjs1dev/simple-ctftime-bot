@@ -1,11 +1,9 @@
 package lineservice
 
-import (
-	linecontent "simple-ctftime-bot/app/line/content"
-)
+import linecontext "simple-ctftime-bot/app/line/context"
 
 // HandleIncomingMessage finds command, executes command, and reply it to user
-func (service *ImplService) HandleIncomingMessage(textMessageContent linecontent.TextMessageContent) error {
+func (service *ImplService) HandleIncomingMessage(txtMessageCtx linecontext.TextMessageContext) error {
 	// TODO: add find command
 	// Create command interface and structure
 	// Reply to user

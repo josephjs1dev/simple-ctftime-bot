@@ -2,23 +2,26 @@ package lineservice
 
 import (
 	"simple-ctftime-bot/app/config"
-	"simple-ctftime-bot/app/content"
-	"simple-ctftime-bot/app/line"
-	linecontent "simple-ctftime-bot/app/line/content"
+	"simple-ctftime-bot/app/ioc"
+	appline "simple-ctftime-bot/app/line"
+	linecontext "simple-ctftime-bot/app/line/context"
 )
 
 // Service is our line service interface that defines function that needs to be implemented
 type Service interface {
-	HandleIncomingMessage(textMessageContent linecontent.TextMessageContent) error
+	HandleIncomingMessage(linecontext.TextMessageContext) error
 }
 
 // ImplService is our implementation of line service
 type ImplService struct {
-	bot    line.BotClient
-	config config.Config
+	bot    appline.BotClient
+	config *config.Config
 }
 
 // BuildService creates ImplService
-func BuildService(appContent *content.AppContent) Service {
-	return &ImplService{bot: appContent.Line, config: appContent.Config}
+func BuildService(container *ioc.Container) Service {
+	config := container.Get((*config.Config)(nil)).(*config.Config)
+	bot := container.Get((*appline.BotClient)(nil)).(appline.BotClient)
+
+	return &ImplService{bot, config}
 }

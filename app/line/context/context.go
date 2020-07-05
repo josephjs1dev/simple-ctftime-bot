@@ -1,14 +1,14 @@
-package linecontent
+package linecontext
 
 import (
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
-type Content struct {
+type Context struct {
 	Event *linebot.Event
 }
 
-type TextMessageContent struct {
-	*Content
+type TextMessageContext struct {
+	*Context
 	Message *linebot.TextMessage
 }

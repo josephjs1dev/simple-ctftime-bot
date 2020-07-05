@@ -12,6 +12,7 @@ jobs:
       after_success:
         - bash <(curl -s https://codecov.io/bash)
     - stage: deploy
+      script: skip
       if: branch = master
       strategy: api
       provider: heroku
