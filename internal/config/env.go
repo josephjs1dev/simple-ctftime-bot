@@ -8,31 +8,6 @@ import (
 	"github.com/mitchellh/mapstructure"
 )
 
-// Config is configuration data used by application
-type Config struct {
-	Host          string `mapstructure:"HOST"`
-	Port          int    `mapstructure:"PORT"`
-	ChannelSecret string `mapstructure:"CHANNEL_SECRET"`
-	ChannelToken  string `mapstructure:"CHANNEL_TOKEN"`
-}
-
-// Reader is interface for global application config
-type Reader interface {
-	Read() error
-	Decode() (*Config, error)
-}
-
-// Service is our config object
-type Service struct {
-	reader Reader
-	config *Config
-}
-
-// GetConfig will return service config
-func (s Service) GetConfig() *Config {
-	return s.config
-}
-
 // EnvReader is implementation of ConfigReader which read env
 type EnvReader struct {
 	env map[string]string
@@ -78,27 +53,4 @@ func (r *EnvReader) Decode() (*Config, error) {
 	}
 
 	return &config, nil
-}
-
-// ReadConfig read configuration file and return Service
-func ReadConfig(reader Reader) (*Service, error) {
-	service := &Service{
-		reader: reader,
-		config: nil,
-	}
-	err := service.reader.Read()
-
-	if err != nil {
-		return service, err
-	}
-
-	config, err := service.reader.Decode()
-
-	if err != nil {
-		return service, err
-	}
-
-	service.config = config
-
-	return service, nil
 }

@@ -8,7 +8,7 @@ jobs:
   include:
     - stage: test
       script: 
-        - go test ./... -v -race -coverprofile=coverage.txt -covermode=atomic
+        - make test
       after_success:
         - bash <(curl -s https://codecov.io/bash)
     - stage: deploy

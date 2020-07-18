@@ -1,4 +1,4 @@
-module simple-ctftime-bot
+module github.com/josephsalimin/simple-ctftime-bot
 
 go 1.14
 
