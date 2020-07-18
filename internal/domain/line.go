@@ -19,7 +19,7 @@ type LineBotPushMessageCall interface {
 
 // LineContext is base context that has Event type properties
 type LineContext struct {
-	Event *linebot.Event
+	*linebot.Event
 }
 
 // LineTextMessageContext embedded Context and add TextMessage type properties

@@ -1,6 +1,8 @@
 package lineservice
 
 import (
+	"strings"
+
 	"github.com/josephsalimin/simple-ctftime-bot/internal/config"
 	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
 	linecmd "github.com/josephsalimin/simple-ctftime-bot/internal/line/command"
@@ -21,6 +23,31 @@ func BuildService(container *ioc.Container) domain.LineService {
 	return &ImplService{bot, config}
 }
 
-func (s *ImplService) findCommand(messageCtx *TextMessageContext) linecmd.Command {
+func verifyCommandMessage(message string) bool {
+	return len(message) > 0 && message[0] == '!'
+}
+
+func parseMessageToCommandNameAndData(message string) (string, []string) {
+	textSlice := strings.Split(message, " ")
+
+	if len(textSlice) > 1 {
+		return textSlice[0], textSlice[1:]
+	}
+
+	return textSlice[0], []string{}
+}
+
+func (s *ImplService) findCommand(messageCtx *domain.LineTextMessageContext) linecmd.Command {
+	if verifyCommandMessage(messageCtx.Message.Text) {
+		commmand, parameter := parseMessageToCommandNameAndData(messageCtx.Message.Text)
+
+		cmdBuilder, ok := linecmd.CommandMap[commmand]
+		if !ok {
+			return nil
+		}
+
+		return cmdBuilder(parameter)
+	}
+
 	return nil
 }
