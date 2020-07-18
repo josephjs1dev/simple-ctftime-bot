@@ -8,10 +8,12 @@ jobs:
   include:
     - stage: test
       script: 
-        - go test ./... -v -race -coverprofile=coverage.txt -covermode=atomic
+        - cp .env.test.example .env.test
+        - make test/all
       after_success:
         - bash <(curl -s https://codecov.io/bash)
     - stage: deploy
+      script: skip
       if: branch = master
       strategy: api
       provider: heroku
