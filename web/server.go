@@ -29,7 +29,7 @@ func (s *Server) bindServices() error {
 	return nil
 }
 
-func (s *Server) addRoutes() {
+func (s *Server) bindRoutes() {
 	lineHandler := linehandler.BuildLineBotHandler(s.Container)
 
 	s.HandleFunc("/line", lineHandler.Callback()).Methods("POST")
@@ -72,11 +72,11 @@ func CreateServer() (*Server, error) {
 		return nil, err
 	}
 
-	if err := s.bindConfig(); err != nil {
+	if err := s.bindServices(); err != nil {
 		return nil, err
 	}
 
-	s.addRoutes()
+	s.bindRoutes()
 
 	return s, nil
 }

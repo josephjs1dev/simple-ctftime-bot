@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestConfig(t *testing.T) {
+func TestReadConfig(t *testing.T) {
 	t.Run("Successfully read config", func(t *testing.T) {
 		assert := assert.New(t)
 
@@ -59,5 +59,20 @@ func TestConfig(t *testing.T) {
 
 		assert.Error(err, "Error Decode")
 		assert.Nil(config)
+	})
+}
+
+func TestIntegrationReadConfig(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping TestIntegrationReadConfig test")
+	}
+
+	t.Run("Successfully read config", func(t *testing.T) {
+		assert := assert.New(t)
+
+		config, err := config.ReadConfig(&config.EnvReader{EnvFiles: []string{"../../.env.test"}})
+
+		assert.Nil(err)
+		assert.NotNil(config)
 	})
 }

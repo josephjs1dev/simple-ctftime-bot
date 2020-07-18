@@ -10,7 +10,8 @@ import (
 
 // EnvReader is implementation of ConfigReader which read env
 type EnvReader struct {
-	env map[string]string
+	EnvFiles []string
+	env      map[string]string
 }
 
 func configHook(f reflect.Type, t reflect.Type, data interface{}) (interface{}, error) {
@@ -25,15 +26,14 @@ func configHook(f reflect.Type, t reflect.Type, data interface{}) (interface{}, 
 
 // Read utilizes godotenv Read to read the environment
 func (r *EnvReader) Read() error {
-	env, err := godotenv.Read()
+	var envData map[string]string
+	var err error
 
-	if err != nil {
-		return err
-	}
+	envData, err = godotenv.Read(r.EnvFiles...)
 
-	r.env = env
+	r.env = envData
 
-	return nil
+	return err
 }
 
 // Decode uses mapstructure to change env to ConfigData and return Config
@@ -41,13 +41,11 @@ func (r *EnvReader) Decode() (*Config, error) {
 	config := Config{}
 	dc := &mapstructure.DecoderConfig{Result: &config, DecodeHook: configHook}
 	decoder, err := mapstructure.NewDecoder(dc)
-
 	if err != nil {
 		return nil, err
 	}
 
 	err = decoder.Decode(r.env)
-
 	if err != nil {
 		return nil, err
 	}

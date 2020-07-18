@@ -47,6 +47,7 @@ func (c *Container) Bind(instance interface{}) {
 func (c *Container) BindInterface(instance, intf interface{}) error {
 	intfType := reflect.TypeOf(intf).Elem()
 	label := fmt.Sprintf("%s.%s", intfType.PkgPath(), intfType.Name())
+
 	return c.bindInterface(label, instance, intfType)
 }
 
