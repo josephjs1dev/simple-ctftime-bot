@@ -1,6 +1,11 @@
 package web
 
 import (
+	"fmt"
+	"net/http"
+	"os"
+
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/josephsalimin/simple-ctftime-bot/internal/config"
 	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
@@ -8,6 +13,7 @@ import (
 	linehandler "github.com/josephsalimin/simple-ctftime-bot/internal/line/handler"
 	lineservice "github.com/josephsalimin/simple-ctftime-bot/internal/line/service"
 	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/ioc"
+	applog "github.com/josephsalimin/simple-ctftime-bot/internal/pkg/log"
 )
 
 // Server is our server application
@@ -57,13 +63,23 @@ func (s *Server) bindLineBot() error {
 	return s.Container.BindInterface(client, (*domain.LineBotClient)(nil))
 }
 
+// Run executes the server
+func (s *Server) Run() error {
+	router := handlers.LoggingHandler(os.Stdout, s)
+
+	config := s.Container.Get((*config.Config)(nil)).(*config.Config)
+	addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
+
+	applog.Infof("Listening on %v", addr)
+	return http.ListenAndServe(addr, router)
+}
+
 // CreateServer runs server initialization
 func CreateServer() (*Server, error) {
 	s := &Server{
 		Router:    mux.NewRouter(),
 		Container: ioc.CreateContainer(),
 	}
-
 	if err := s.bindConfig(); err != nil {
 		return nil, err
 	}
