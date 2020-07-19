@@ -32,3 +32,16 @@ type LineTextMessageContext struct {
 type LineService interface {
 	HandleIncomingMessage(*LineTextMessageContext) error
 }
+
+// LineCommand is interface for line command
+type LineCommand interface {
+	Process() ([]linebot.SendingMessage, error)
+}
+
+// LineCommandBuilder is builder function to generate command processor
+type LineCommandBuilder func([]string) LineCommand
+
+// LineCommandMapper is mapper that returns LineCommandBuilder
+type LineCommandMapper interface {
+	GetCommand(string) LineCommandBuilder
+}

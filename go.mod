@@ -15,4 +15,5 @@ require (
 	gopkg.in/check.v1 v1.0.0-20200227125254-8fa46927fb4f // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 	go.uber.org/zap v1.15.0
+	github.com/anaskhan96/soup v1.1.1
 )
