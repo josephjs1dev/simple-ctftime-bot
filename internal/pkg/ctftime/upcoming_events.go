@@ -2,7 +2,6 @@ package ctftime
 
 import (
 	"github.com/anaskhan96/soup"
-	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
 )
 
 var upcomingOpenEventsDirections = []HTMLDirection{
@@ -76,8 +75,8 @@ func getCTFDuration(node soup.Root) (string, error) {
 }
 
 // GetUpcomingEvents ...
-func (c *Client) GetUpcomingEvents() ([]domain.CTFTimeUpcomingEvent, error) {
-	upcomingEvents := make([]domain.CTFTimeUpcomingEvent, 0)
+func (c *Client) GetUpcomingEvents() ([]Event, error) {
+	upcomingEvents := make([]Event, 0)
 
 	body, err := c.Get(c.baseURL)
 	if err != nil {
@@ -121,7 +120,7 @@ func (c *Client) GetUpcomingEvents() ([]domain.CTFTimeUpcomingEvent, error) {
 			return nil, err
 		}
 
-		upcomingEvents = append(upcomingEvents, domain.CTFTimeUpcomingEvent{
+		upcomingEvents = append(upcomingEvents, Event{
 			Title:    title,
 			Format:   format,
 			URL:      c.baseURL + uri,
