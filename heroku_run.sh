@@ -1,2 +1,2 @@
 printenv > .env
-bin/app
+bin/simple_ctftime_bot

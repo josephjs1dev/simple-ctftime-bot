@@ -8,4 +8,4 @@ test/all:
 	go test ./... -v -race -coverprofile=coverage.txt -covermode=atomic
 
 build:
-	go build -o ./bin/app ./cmd/simple_ctftime_bot
+	go build -o ./bin/simple_ctftime_bot ./cmd/simple_ctftime_bot
