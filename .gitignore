@@ -27,3 +27,5 @@ coverage.txt
 # Output folder
 bin/*
 !bin/.gitkeep
+
+.DS_Store

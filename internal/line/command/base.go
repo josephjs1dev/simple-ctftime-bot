@@ -1,8 +1,6 @@
 package linecmd
 
-type Command interface {
-}
-
+// BaseCommand will be embedded by all children command
 type BaseCommand struct {
 	Parameter []string
 }

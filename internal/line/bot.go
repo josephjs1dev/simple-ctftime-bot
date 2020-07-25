@@ -5,6 +5,7 @@ import (
 
 	"github.com/josephsalimin/simple-ctftime-bot/internal/config"
 	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
+	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/ioc"
 
 	"github.com/line/line-bot-sdk-go/linebot"
 )
@@ -25,7 +26,8 @@ func (bot *AppBot) ReplyMessage(replyToken string, messages ...linebot.SendingMe
 }
 
 // InitializeBot initiate line-bot-sdk-go client
-func InitializeBot(config *config.Config) (domain.LineBotClient, error) {
+func InitializeBot(container *ioc.Container) (domain.LineBotClient, error) {
+	config := container.Get((*config.Config)(nil)).(*config.Config)
 	client, err := linebot.New(
 		config.ChannelSecret,
 		config.ChannelToken,

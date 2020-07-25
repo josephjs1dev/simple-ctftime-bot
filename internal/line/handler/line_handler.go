@@ -53,12 +53,11 @@ func (h LineBotHandler) Callback() http.HandlerFunc {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
 					textMessageContent := &domain.LineTextMessageContext{LineContext: ctx, Message: message}
-					err := h.service.HandleIncomingMessage(textMessageContent)
-					if err != nil {
-						return
-					}
+					h.service.HandleIncomingMessage(textMessageContent)
 				}
 			}
 		}
+
+		w.WriteHeader(200)
 	})
 }

@@ -19,7 +19,7 @@ type LineBotPushMessageCall interface {
 
 // LineContext is base context that has Event type properties
 type LineContext struct {
-	Event *linebot.Event
+	*linebot.Event
 }
 
 // LineTextMessageContext embedded Context and add TextMessage type properties
@@ -31,4 +31,17 @@ type LineTextMessageContext struct {
 // LineService is our line service interface that defines function that needs to be implemented
 type LineService interface {
 	HandleIncomingMessage(*LineTextMessageContext) error
+}
+
+// LineCommand is interface for line command
+type LineCommand interface {
+	Process() ([]linebot.SendingMessage, error)
+}
+
+// LineCommandBuilder is builder function to generate command processor
+type LineCommandBuilder func([]string) LineCommand
+
+// LineCommandMapper is mapper that returns LineCommandBuilder
+type LineCommandMapper interface {
+	GetCommand(string) LineCommandBuilder
 }
