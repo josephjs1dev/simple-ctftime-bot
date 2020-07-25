@@ -80,7 +80,7 @@ func (c *HelpCommand) Process() ([]linebot.SendingMessage, error) {
 		},
 	}
 
-	messages := []linebot.SendingMessage{linebot.NewFlexMessage("Upcoming Events Information", contents)}
+	messages := []linebot.SendingMessage{linebot.NewFlexMessage("Commands Usage", contents)}
 
 	return messages, nil
 }
