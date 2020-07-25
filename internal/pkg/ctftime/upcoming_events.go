@@ -2,30 +2,31 @@ package ctftime
 
 import (
 	"github.com/anaskhan96/soup"
+	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
 )
 
-var upcomingOpenEventsDirections = []HTMLDirection{
+var upcomingOpenEventsTraversalOpts = []HTMLTraversalOption{
 	{FindType: findOne, FindParams: []string{"div", "id", "upcoming"}},
 	{FindType: findOne, FindParams: []string{"table"}},
 	{FindType: findOne, FindParams: []string{"tbody"}},
 	{FindType: findAll, FindParams: []string{"tr"}},
 }
 
-var eventCTFFormat = []HTMLDirection{
+var eventCTFFormat = []HTMLTraversalOption{
 	{FindType: findOne, FindParams: []string{"td", "class", "ctf_format"}},
 	{FindType: findOne, FindParams: []string{"img"}},
 }
 
-var eventCTFTitle = []HTMLDirection{
+var eventCTFTitle = []HTMLTraversalOption{
 	{FindType: findOneInAll, FindIndex: 1, FindParams: []string{"td"}},
 	{FindType: findOne, FindParams: []string{"a"}},
 }
 
-var eventCTFDate = []HTMLDirection{
+var eventCTFDate = []HTMLTraversalOption{
 	{FindType: findOneInAll, FindIndex: 2, FindParams: []string{"td"}},
 }
 
-var eventCTFDuration = []HTMLDirection{
+var eventCTFDuration = []HTMLTraversalOption{
 	{FindType: findOneInAll, FindIndex: 3, FindParams: []string{"td"}},
 }
 
@@ -35,7 +36,7 @@ func getCTFFormat(node soup.Root) (string, error) {
 		return "", err
 	}
 
-	return getAttrKey(child[0], "data-original-title"), nil
+	return getAttrKey(child[0], "title"), nil
 }
 
 func getCTFTitle(node soup.Root) (string, error) {
@@ -75,8 +76,8 @@ func getCTFDuration(node soup.Root) (string, error) {
 }
 
 // GetUpcomingEvents ...
-func (c *Client) GetUpcomingEvents() ([]Event, error) {
-	upcomingEvents := make([]Event, 0)
+func (c *Client) GetUpcomingEvents() ([]domain.CTFTimeEvent, error) {
+	upcomingEvents := make([]domain.CTFTimeEvent, 0)
 
 	body, err := c.Get(c.baseURL)
 	if err != nil {
@@ -89,7 +90,7 @@ func (c *Client) GetUpcomingEvents() ([]Event, error) {
 		return nil, node.Error
 	}
 
-	nodes, err := requiredTraverseHTMLNode(node, upcomingOpenEventsDirections)
+	nodes, err := requiredTraverseHTMLNode(node, upcomingOpenEventsTraversalOpts)
 	if err != nil {
 		return nil, err
 	}
@@ -120,7 +121,7 @@ func (c *Client) GetUpcomingEvents() ([]Event, error) {
 			return nil, err
 		}
 
-		upcomingEvents = append(upcomingEvents, Event{
+		upcomingEvents = append(upcomingEvents, domain.CTFTimeEvent{
 			Title:    title,
 			Format:   format,
 			URL:      c.baseURL + uri,

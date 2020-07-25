@@ -15,8 +15,8 @@ const (
 	findOneInAll
 )
 
-// HTMLDirection ...
-type HTMLDirection struct {
+// HTMLTraversalOption ...
+type HTMLTraversalOption struct {
 	FindType   NodeFindType
 	FindIndex  int
 	FindParams []string
@@ -28,16 +28,16 @@ var ErrIndexOutOfRange = errors.New("error root FindAll results out of range fro
 // ErrEmptyResult indicates that function returns empty node
 var ErrEmptyResult = errors.New("error empty results from FindAll")
 
-func traverseHTMLNode(root soup.Root, directions []HTMLDirection) ([]soup.Root, error) {
+func traverseHTMLNode(root soup.Root, opts []HTMLTraversalOption) ([]soup.Root, error) {
 	nodes := []soup.Root{root}
-	directionSize := len(directions)
+	optSize := len(opts)
 
-	for _, direction := range directions {
+	for _, opt := range opts {
 		children := []soup.Root{}
-		switch direction.FindType {
+		switch opt.FindType {
 		case findOne:
 			for _, n := range nodes {
-				child := n.Find(direction.FindParams...)
+				child := n.Find(opt.FindParams...)
 				if child.Error != nil {
 					return nil, child.Error
 				}
@@ -47,8 +47,8 @@ func traverseHTMLNode(root soup.Root, directions []HTMLDirection) ([]soup.Root, 
 			nodes = children
 		case findAll:
 			for idx, n := range nodes {
-				res := n.FindAll(direction.FindParams...)
-				if len(res) == 0 && idx < directionSize-1 {
+				res := n.FindAll(opt.FindParams...)
+				if len(res) == 0 && idx < optSize-1 {
 					return nil, ErrEmptyResult
 				}
 
@@ -57,12 +57,12 @@ func traverseHTMLNode(root soup.Root, directions []HTMLDirection) ([]soup.Root, 
 			nodes = children
 		case findOneInAll:
 			for _, n := range nodes {
-				res := n.FindAll(direction.FindParams...)
-				if len(res) < direction.FindIndex {
+				res := n.FindAll(opt.FindParams...)
+				if len(res) < opt.FindIndex {
 					return nil, ErrIndexOutOfRange
 				}
 
-				children = append(children, res[direction.FindIndex])
+				children = append(children, res[opt.FindIndex])
 			}
 			nodes = children
 		}
@@ -71,8 +71,8 @@ func traverseHTMLNode(root soup.Root, directions []HTMLDirection) ([]soup.Root, 
 	return nodes, nil
 }
 
-func requiredTraverseHTMLNode(root soup.Root, directions []HTMLDirection) ([]soup.Root, error) {
-	nodes, err := traverseHTMLNode(root, directions)
+func requiredTraverseHTMLNode(root soup.Root, opts []HTMLTraversalOption) ([]soup.Root, error) {
+	nodes, err := traverseHTMLNode(root, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func requiredTraverseHTMLNode(root soup.Root, directions []HTMLDirection) ([]sou
 func getAttrKey(node soup.Root, key string) string {
 	attr := node.Attrs()
 	if attr != nil {
-		v, ok := attr["href"]
+		v, ok := attr[key]
 		if ok {
 			return v
 		}

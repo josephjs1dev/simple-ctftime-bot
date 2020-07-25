@@ -6,22 +6,22 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
-// CurrentEventCommand processes command for current event
-type CurrentEventCommand struct {
+// CurrentEventsCommand processes command for current event
+type CurrentEventsCommand struct {
 	BaseCommand
 	client *ctftime.Client
 }
 
 // Process ...
-func (c *CurrentEventCommand) Process() ([]linebot.SendingMessage, error) {
+func (c *CurrentEventsCommand) Process() ([]linebot.SendingMessage, error) {
 	return []linebot.SendingMessage{}, nil
 }
 
-func buildCommandEvent(parameter []string) domain.LineCommand {
-	return &CurrentEventCommand{
+func buildCurrentEventsCommand(parameter []string) domain.LineCommand {
+	return &CurrentEventsCommand{
 		BaseCommand: BaseCommand{
 			Parameter: parameter,
 		},
-		client: ctftime.GetClient(),
+		client: ctftime.BuildDefaultClient(),
 	}
 }

@@ -25,24 +25,24 @@ func BuildService(container *ioc.Container) domain.LineService {
 }
 
 func verifyCommandMessage(message string) bool {
-	return len(message) > 0 && message[0] == '!'
+	return len(message) > 1 && message[0] == '!'
 }
 
-func parseMessageToCommandNameAndData(message string) (string, []string) {
+func parseMessageToCommandNameAndArgs(message string) (string, []string) {
 	textSlice := strings.Split(message, " ")
 
 	if len(textSlice) > 1 {
-		return textSlice[0], textSlice[1:]
+		return textSlice[0][1:], textSlice[1:]
 	}
 
-	return textSlice[0], []string{}
+	return textSlice[0][1:], []string{}
 }
 
 func (s *ImplService) findCommand(messageCtx *domain.LineTextMessageContext) domain.LineCommand {
 	if verifyCommandMessage(messageCtx.Message.Text) {
-		commmand, parameter := parseMessageToCommandNameAndData(messageCtx.Message.Text)
+		command, parameter := parseMessageToCommandNameAndArgs(messageCtx.Message.Text)
 
-		cmdBuilder := s.mapper.GetCommand(commmand)
+		cmdBuilder := s.mapper.GetCommand(command)
 		if cmdBuilder == nil {
 			return nil
 		}

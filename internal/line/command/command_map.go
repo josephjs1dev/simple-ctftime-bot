@@ -4,7 +4,9 @@ import "github.com/josephsalimin/simple-ctftime-bot/internal/domain"
 
 // CommandMap maps all command name to command builder
 var commandMap map[string]domain.LineCommandBuilder = map[string]domain.LineCommandBuilder{
-	"current_event": buildCommandEvent,
+	"help":            buildHelpCommand,
+	"current_events":  buildCurrentEventsCommand,
+	"upcoming_events": buildUpcomingEventsCommand,
 }
 
 // CommandMapper is implementation of domain.LineCommandMapper

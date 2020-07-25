@@ -5,26 +5,18 @@ import (
 	"net/http"
 )
 
-const baseURL = "https://ctftime.org"
-
 // Client is our CTFTime Client struct
 type Client struct {
 	baseURL    string
 	httpClient *http.Client
 }
 
-var defaultClient *Client
-
-// GetClient returns DefaultClient
-func GetClient() *Client {
-	if defaultClient == nil {
-		defaultClient = &Client{
-			baseURL:    baseURL,
-			httpClient: &http.Client{},
-		}
+// BuildDefaultClient returns client with default opts
+func BuildDefaultClient() *Client {
+	return &Client{
+		baseURL:    baseURL,
+		httpClient: &http.Client{},
 	}
-
-	return defaultClient
 }
 
 // Get requests and returns body string

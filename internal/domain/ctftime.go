@@ -1,7 +1,7 @@
-package ctftime
+package domain
 
-// Event ...
-type Event struct {
+// CTFTimeEvent ...
+type CTFTimeEvent struct {
 	Title    string
 	URL      string
 	Format   string

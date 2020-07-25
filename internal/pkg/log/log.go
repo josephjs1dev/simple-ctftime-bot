@@ -60,6 +60,15 @@ func Infof(msg string, v ...interface{}) {
 	}
 }
 
+// Warnf calls sugared.Infof if present, else calls log.Println
+func Warnf(msg string, v ...interface{}) {
+	if sugared != nil {
+		sugared.Warnf(msg, v)
+	} else {
+		log.Println(fmt.Sprintf(msg, v...))
+	}
+}
+
 // Errorf calls sugared.Errorf if present, else calls log.Println
 func Errorf(msg string, v ...interface{}) {
 	if sugared != nil {

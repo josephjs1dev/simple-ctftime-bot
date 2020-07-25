@@ -15,15 +15,15 @@ func (s *ImplService) HandleIncomingMessage(textMessageCtx *domain.LineTextMessa
 
 	result, err := cmd.Process()
 	if err != nil {
-		applog.Errorf("Error processing command %v, error = %v\n", cmd, err)
+		applog.Errorf("Error processing command %v, error = %v", cmd, err)
 
 		return err
 	}
 
 	if resp, err := s.bot.ReplyMessage(textMessageCtx.ReplyToken, result...).Do(); err != nil {
-		applog.Errorf("Error reply message, error = %v\n", err)
+		applog.Errorf("Error reply message, error = %v", err)
 	} else {
-		applog.Errorf("Successfully reply message Result = %v\n", resp)
+		applog.Infof("Successfully reply message Result = %v", *resp)
 	}
 
 	return nil
