@@ -8,9 +8,9 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/josephsalimin/simple-ctftime-bot/internal/config"
-	linehandler "github.com/josephsalimin/simple-ctftime-bot/internal/line/handler"
 	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/ioc"
 	applog "github.com/josephsalimin/simple-ctftime-bot/internal/pkg/log"
+	"github.com/josephsalimin/simple-ctftime-bot/web/handler"
 )
 
 // Server is our server application
@@ -32,7 +32,7 @@ func (s *Server) bindImplementations() error {
 }
 
 func (s *Server) bindRoutes() {
-	lineHandler := linehandler.BuildLineBotHandler(s.Container)
+	lineHandler := handler.BuildLineBotHandler(s.Container)
 
 	s.HandleFunc("/line", lineHandler.Callback()).Methods("POST")
 	s.HandleFunc("/line", lineHandler.Index()).Methods("GET")

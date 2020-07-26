@@ -1,4 +1,4 @@
-package linehandler
+package handler
 
 import (
 	"net/http"

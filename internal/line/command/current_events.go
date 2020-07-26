@@ -14,7 +14,36 @@ type CurrentEventsCommand struct {
 
 // Process ...
 func (c *CurrentEventsCommand) Process() ([]linebot.SendingMessage, error) {
-	return []linebot.SendingMessage{}, nil
+	currentEvents, err := c.client.GetCurrentEvents()
+	if err != nil && err != domain.ErrNoCurrentEvent {
+		return nil, err
+	}
+
+	if len(currentEvents) == 0 {
+		messages := []linebot.SendingMessage{
+			linebot.NewTextMessage("No current event"),
+		}
+
+		return messages, nil
+	}
+
+	contents := make([]*linebot.BubbleContainer, 0)
+	// Iterate each object and create carousel template
+	for _, currentEvent := range currentEvents {
+		contents = append(contents, buildEventBubbleContainer(&currentEvent))
+	}
+
+	messages := []linebot.SendingMessage{
+		linebot.NewFlexMessage(
+			"Current Events Information",
+			&linebot.CarouselContainer{
+				Type:     linebot.FlexContainerTypeCarousel,
+				Contents: contents,
+			},
+		),
+	}
+
+	return messages, nil
 }
 
 func buildCurrentEventsCommand(parameter []string) domain.LineCommand {

@@ -5,33 +5,37 @@ import (
 	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
 )
 
-var upcomingOpenEventsTraversalOpts = []HTMLTraversalOption{
-	{FindType: findOne, FindParams: []string{"div", "id", "upcoming"}},
-	{FindType: findOne, FindParams: []string{"table"}},
-	{FindType: findOne, FindParams: []string{"tbody"}},
-	{FindType: findAll, FindParams: []string{"tr"}},
+var upcomingOpenEventsTraversalOpts = []htmlTraversalOption{
+	{findType: findOne, findParams: []string{"div", "id", "upcoming"}},
+	{findType: findOne, findParams: []string{"table"}},
+	{findType: findOne, findParams: []string{"tbody"}},
+	{findType: findAll, findParams: []string{"tr"}},
 }
 
-var eventCTFFormat = []HTMLTraversalOption{
-	{FindType: findOne, FindParams: []string{"td", "class", "ctf_format"}},
-	{FindType: findOne, FindParams: []string{"img"}},
+var upcomingEventFormatOpts = []htmlTraversalOption{
+	{findType: findOne, findParams: []string{"td", "class", "ctf_format"}},
+	{findType: findOne, findParams: []string{"img"}},
 }
 
-var eventCTFTitle = []HTMLTraversalOption{
-	{FindType: findOneInAll, FindIndex: 1, FindParams: []string{"td"}},
-	{FindType: findOne, FindParams: []string{"a"}},
+var upcomingEventTitleOpts = []htmlTraversalOption{
+	{findType: findOneInAll, findIndex: 1, findParams: []string{"td"}},
+	{findType: findOne, findParams: []string{"a"}},
 }
 
-var eventCTFDate = []HTMLTraversalOption{
-	{FindType: findOneInAll, FindIndex: 2, FindParams: []string{"td"}},
+var upcomingEventDateOpts = []htmlTraversalOption{
+	{findType: findOneInAll, findIndex: 2, findParams: []string{"td"}},
 }
 
-var eventCTFDuration = []HTMLTraversalOption{
-	{FindType: findOneInAll, FindIndex: 3, FindParams: []string{"td"}},
+var upcomingEventDurationOpts = []htmlTraversalOption{
+	{findType: findOneInAll, findIndex: 3, findParams: []string{"td"}},
 }
 
-func getCTFFormat(node soup.Root) (string, error) {
-	child, err := requiredTraverseHTMLNode(node, eventCTFFormat)
+var upcomingEventTeamOpts = []htmlTraversalOption{
+	{findType: findOne, findParams: []string{"small", "class", "muted pull-right"}},
+}
+
+func getUpcomingEventFormat(node soup.Root) (string, error) {
+	child, err := requiredTraverseHTMLNode(node, upcomingEventFormatOpts)
 	if err != nil {
 		return "", err
 	}
@@ -39,8 +43,8 @@ func getCTFFormat(node soup.Root) (string, error) {
 	return getAttrKey(child[0], "title"), nil
 }
 
-func getCTFTitle(node soup.Root) (string, error) {
-	child, err := requiredTraverseHTMLNode(node, eventCTFTitle)
+func getUpcomingEventTitle(node soup.Root) (string, error) {
+	child, err := requiredTraverseHTMLNode(node, upcomingEventTitleOpts)
 	if err != nil {
 		return "", err
 	}
@@ -48,8 +52,8 @@ func getCTFTitle(node soup.Root) (string, error) {
 	return child[0].Text(), nil
 }
 
-func getCTFURI(node soup.Root) (string, error) {
-	child, err := requiredTraverseHTMLNode(node, eventCTFTitle)
+func getUpcomingEventURI(node soup.Root) (string, error) {
+	child, err := requiredTraverseHTMLNode(node, upcomingEventTitleOpts)
 	if err != nil {
 		return "", err
 	}
@@ -57,8 +61,8 @@ func getCTFURI(node soup.Root) (string, error) {
 	return getAttrKey(child[0], "href"), nil
 }
 
-func getCTFDate(node soup.Root) (string, error) {
-	child, err := requiredTraverseHTMLNode(node, eventCTFDate)
+func getUpcomingEventDate(node soup.Root) (string, error) {
+	child, err := requiredTraverseHTMLNode(node, upcomingEventDateOpts)
 	if err != nil {
 		return "", err
 	}
@@ -66,8 +70,17 @@ func getCTFDate(node soup.Root) (string, error) {
 	return child[0].Text(), nil
 }
 
-func getCTFDuration(node soup.Root) (string, error) {
-	child, err := requiredTraverseHTMLNode(node, eventCTFDuration)
+func getUpcomingEventDuration(node soup.Root) (string, error) {
+	child, err := requiredTraverseHTMLNode(node, upcomingEventDurationOpts)
+	if err != nil {
+		return "", err
+	}
+
+	return child[0].Text(), nil
+}
+
+func getUpcomingEventTeam(node soup.Root) (string, error) {
+	child, err := requiredTraverseHTMLNode(node, upcomingEventTeamOpts)
 	if err != nil {
 		return "", err
 	}
@@ -96,27 +109,32 @@ func (c *Client) GetUpcomingEvents() ([]domain.CTFTimeEvent, error) {
 	}
 
 	for i := 1; i < len(nodes); i++ {
-		format, err := getCTFFormat(nodes[i])
+		format, err := getUpcomingEventFormat(nodes[i])
 		if err != nil {
 			return nil, err
 		}
 
-		title, err := getCTFTitle(nodes[i])
+		title, err := getUpcomingEventTitle(nodes[i])
 		if err != nil {
 			return nil, err
 		}
 
-		uri, err := getCTFURI(nodes[i])
+		uri, err := getUpcomingEventURI(nodes[i])
 		if err != nil {
 			return nil, err
 		}
 
-		date, err := getCTFDate(nodes[i])
+		date, err := getUpcomingEventDate(nodes[i])
 		if err != nil {
 			return nil, err
 		}
 
-		duration, err := getCTFDuration(nodes[i])
+		duration, err := getUpcomingEventDuration(nodes[i])
+		if err != nil {
+			return nil, err
+		}
+
+		team, err := getUpcomingEventTeam(nodes[i])
 		if err != nil {
 			return nil, err
 		}
@@ -127,6 +145,7 @@ func (c *Client) GetUpcomingEvents() ([]domain.CTFTimeEvent, error) {
 			URL:      c.baseURL + uri,
 			Date:     date,
 			Duration: duration,
+			Team:     team,
 		})
 	}
 

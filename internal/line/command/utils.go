@@ -10,6 +10,7 @@ func buildEventBubbleContainer(event *domain.CTFTimeEvent) *linebot.BubbleContai
 		"Format":   event.Format,
 		"Date":     event.Date,
 		"Duration": event.Duration,
+		"Team":     event.Team,
 	}
 
 	descContents := make([]linebot.FlexComponent, 0)

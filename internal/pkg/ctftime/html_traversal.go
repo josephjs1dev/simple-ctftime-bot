@@ -15,11 +15,10 @@ const (
 	findOneInAll
 )
 
-// HTMLTraversalOption ...
-type HTMLTraversalOption struct {
-	FindType   NodeFindType
-	FindIndex  int
-	FindParams []string
+type htmlTraversalOption struct {
+	findType   NodeFindType
+	findIndex  int
+	findParams []string
 }
 
 // ErrIndexOutOfRange indicates that function can't find the node from results
@@ -28,16 +27,16 @@ var ErrIndexOutOfRange = errors.New("error root FindAll results out of range fro
 // ErrEmptyResult indicates that function returns empty node
 var ErrEmptyResult = errors.New("error empty results from FindAll")
 
-func traverseHTMLNode(root soup.Root, opts []HTMLTraversalOption) ([]soup.Root, error) {
+func traverseHTMLNode(root soup.Root, opts []htmlTraversalOption) ([]soup.Root, error) {
 	nodes := []soup.Root{root}
 	optSize := len(opts)
 
 	for _, opt := range opts {
 		children := []soup.Root{}
-		switch opt.FindType {
+		switch opt.findType {
 		case findOne:
 			for _, n := range nodes {
-				child := n.Find(opt.FindParams...)
+				child := n.FindStrict(opt.findParams...)
 				if child.Error != nil {
 					return nil, child.Error
 				}
@@ -47,7 +46,7 @@ func traverseHTMLNode(root soup.Root, opts []HTMLTraversalOption) ([]soup.Root, 
 			nodes = children
 		case findAll:
 			for idx, n := range nodes {
-				res := n.FindAll(opt.FindParams...)
+				res := n.FindAllStrict(opt.findParams...)
 				if len(res) == 0 && idx < optSize-1 {
 					return nil, ErrEmptyResult
 				}
@@ -57,12 +56,12 @@ func traverseHTMLNode(root soup.Root, opts []HTMLTraversalOption) ([]soup.Root, 
 			nodes = children
 		case findOneInAll:
 			for _, n := range nodes {
-				res := n.FindAll(opt.FindParams...)
-				if len(res) < opt.FindIndex {
+				res := n.FindAllStrict(opt.findParams...)
+				if len(res) < opt.findIndex {
 					return nil, ErrIndexOutOfRange
 				}
 
-				children = append(children, res[opt.FindIndex])
+				children = append(children, res[opt.findIndex])
 			}
 			nodes = children
 		}
@@ -71,7 +70,7 @@ func traverseHTMLNode(root soup.Root, opts []HTMLTraversalOption) ([]soup.Root, 
 	return nodes, nil
 }
 
-func requiredTraverseHTMLNode(root soup.Root, opts []HTMLTraversalOption) ([]soup.Root, error) {
+func requiredTraverseHTMLNode(root soup.Root, opts []htmlTraversalOption) ([]soup.Root, error) {
 	nodes, err := traverseHTMLNode(root, opts)
 	if err != nil {
 		return nil, err

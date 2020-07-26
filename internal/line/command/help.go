@@ -14,7 +14,8 @@ type HelpCommand struct {
 func (c *HelpCommand) Process() ([]linebot.SendingMessage, error) {
 	commandMap := map[string]string{
 		"!help":            "to get commands usage",
-		"!upcoming_events": "to get upcomings CTFTime events",
+		"!upcoming_events": "to get upcoming CTFTime events",
+		"!current_events":  "to get current CTFTime events",
 	}
 
 	commandContents := make([]linebot.FlexComponent, 0)
