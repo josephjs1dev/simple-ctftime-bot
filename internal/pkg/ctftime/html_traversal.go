@@ -57,7 +57,7 @@ func traverseHTMLNode(root soup.Root, opts []htmlTraversalOption) ([]soup.Root, 
 		case findOneInAll:
 			for _, n := range nodes {
 				res := n.FindAllStrict(opt.findParams...)
-				if len(res) < opt.findIndex {
+				if len(res) <= opt.findIndex {
 					return nil, ErrIndexOutOfRange
 				}
 

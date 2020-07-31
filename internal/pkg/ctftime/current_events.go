@@ -8,7 +8,7 @@ import (
 var currentEventTextOpts = []htmlTraversalOption{
 	{findType: findOneInAll, findParams: []string{"div", "class", "span6"}, findIndex: 1},
 	{findType: findOne, findParams: []string{"div", "class", "page-header"}},
-	{findType: findOneInAll, findParams: []string{"a"}, findIndex: 0},
+	{findType: findOneInAll, findParams: []string{"h2"}, findIndex: 0},
 }
 
 var currentEventsTraversalOpts = []htmlTraversalOption{
@@ -45,7 +45,7 @@ func checkCurrentEventText(node soup.Root) (bool, error) {
 		return false, err
 	}
 
-	return child[0].Text() == "Current Events", nil
+	return child[0].Text() == "Now running", nil
 }
 
 func getCurrentEventFormat(node soup.Root) (string, error) {
