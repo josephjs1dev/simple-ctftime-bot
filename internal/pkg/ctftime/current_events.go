@@ -103,7 +103,7 @@ func getCurrentEventTeam(node soup.Root) (string, error) {
 	return child[0].Text(), nil
 }
 
-// GetCurrentEvents ...
+// GetCurrentEvents fetch CTFTime homepage and parse HTML page there to get current running events
 func (c *Client) GetCurrentEvents() ([]domain.CTFTimeEvent, error) {
 	upcomingEvents := make([]domain.CTFTimeEvent, 0)
 
@@ -112,19 +112,19 @@ func (c *Client) GetCurrentEvents() ([]domain.CTFTimeEvent, error) {
 		return nil, err
 	}
 
-	node := soup.HTMLParse(body)
-	if node.Error != nil {
-		return nil, node.Error
+	root := soup.HTMLParse(body)
+	if root.Error != nil {
+		return nil, root.Error
 	}
 
-	checkCurrentEvent, err := checkCurrentEventText(node)
+	checkCurrentEvent, err := checkCurrentEventText(root)
 	if err != nil {
 		return nil, err
 	} else if !checkCurrentEvent {
 		return nil, domain.ErrNoCurrentEvent
 	}
 
-	nodes, err := requiredTraverseHTMLNode(node, currentEventsTraversalOpts)
+	nodes, err := requiredTraverseHTMLNode(root, currentEventsTraversalOpts)
 	if err != nil {
 		return nil, err
 	}

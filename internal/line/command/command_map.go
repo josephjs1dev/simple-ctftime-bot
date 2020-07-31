@@ -7,6 +7,7 @@ var commandMap map[string]domain.LineCommandBuilder = map[string]domain.LineComm
 	"help":            buildHelpCommand,
 	"current_events":  buildCurrentEventsCommand,
 	"upcoming_events": buildUpcomingEventsCommand,
+	"top_teams":       buildTopTeamsCommand,
 }
 
 // CommandMapper is implementation of domain.LineCommandMapper

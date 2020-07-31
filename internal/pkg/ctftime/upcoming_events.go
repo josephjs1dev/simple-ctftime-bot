@@ -88,7 +88,7 @@ func getUpcomingEventTeam(node soup.Root) (string, error) {
 	return child[0].Text(), nil
 }
 
-// GetUpcomingEvents ...
+// GetUpcomingEvents fetch CTFTime home page and parse the HTML to get upcoming events data
 func (c *Client) GetUpcomingEvents() ([]domain.CTFTimeEvent, error) {
 	upcomingEvents := make([]domain.CTFTimeEvent, 0)
 
@@ -97,13 +97,12 @@ func (c *Client) GetUpcomingEvents() ([]domain.CTFTimeEvent, error) {
 		return nil, err
 	}
 
-	node := soup.HTMLParse(body)
-
-	if node.Error != nil {
-		return nil, node.Error
+	root := soup.HTMLParse(body)
+	if root.Error != nil {
+		return nil, root.Error
 	}
 
-	nodes, err := requiredTraverseHTMLNode(node, upcomingOpenEventsTraversalOpts)
+	nodes, err := requiredTraverseHTMLNode(root, upcomingOpenEventsTraversalOpts)
 	if err != nil {
 		return nil, err
 	}

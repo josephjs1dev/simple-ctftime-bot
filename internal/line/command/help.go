@@ -16,6 +16,7 @@ func (c *HelpCommand) Process() ([]linebot.SendingMessage, error) {
 		"!help":            "to get commands usage",
 		"!upcoming_events": "to get upcoming CTFTime events",
 		"!current_events":  "to get current CTFTime events",
+		"!top_teams":       "to get top teams, can add parameter -c <country_id> -y <year>",
 	}
 
 	commandContents := make([]linebot.FlexComponent, 0)

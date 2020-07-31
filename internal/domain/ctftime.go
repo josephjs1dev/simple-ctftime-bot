@@ -12,6 +12,14 @@ type CTFTimeEvent struct {
 	Team     string
 }
 
+// CTFTimeTeam ...
+type CTFTimeTeam struct {
+	WorldwidePosition string
+	Name              string
+	Points            string
+	Events            string
+}
+
 /** Error Section **/
 
 // ErrNoCurrentEvent ...
