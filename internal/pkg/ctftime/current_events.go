@@ -37,6 +37,7 @@ var currentEventDurationOpts = []htmlTraversalOption{
 
 var currentEventTeamOpts = []htmlTraversalOption{
 	{findType: findOneInAll, findParams: []string{"td"}, findIndex: 1},
+	{findType: findOne, findParams: []string{"small", "class", "muted pull-right"}},
 }
 
 func checkCurrentEventText(node soup.Root) (bool, error) {

@@ -17,8 +17,8 @@ func BuildCommandMapper() domain.LineCommandMapper {
 	return &CommandMapper{}
 }
 
-// GetCommand returns command builder from command name
-func (m *CommandMapper) GetCommand(command string) domain.LineCommandBuilder {
+// GetCommandBuilder returns command builder from command name
+func (m *CommandMapper) GetCommandBuilder(command string) domain.LineCommandBuilder {
 	v, ok := commandMap[command]
 
 	if ok {

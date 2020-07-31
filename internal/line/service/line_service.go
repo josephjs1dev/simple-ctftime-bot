@@ -42,7 +42,7 @@ func (s *ImplService) findCommand(messageCtx *domain.LineTextMessageContext) dom
 	if verifyCommandMessage(messageCtx.Message.Text) {
 		command, parameter := parseMessageToCommandNameAndArgs(messageCtx.Message.Text)
 
-		cmdBuilder := s.mapper.GetCommand(command)
+		cmdBuilder := s.mapper.GetCommandBuilder(command)
 		if cmdBuilder == nil {
 			return nil
 		}

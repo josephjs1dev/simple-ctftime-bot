@@ -43,5 +43,5 @@ type LineCommandBuilder func([]string) LineCommand
 
 // LineCommandMapper is mapper that returns LineCommandBuilder
 type LineCommandMapper interface {
-	GetCommand(string) LineCommandBuilder
+	GetCommandBuilder(string) LineCommandBuilder
 }

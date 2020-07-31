@@ -15,6 +15,10 @@ func buildEventBubbleContainer(event *domain.CTFTimeEvent) *linebot.BubbleContai
 
 	descContents := make([]linebot.FlexComponent, 0)
 	for key := range descMap {
+		if descMap[key] == "" {
+			continue
+		}
+
 		content := &linebot.BoxComponent{
 			Type:    linebot.FlexComponentTypeBox,
 			Layout:  linebot.FlexBoxLayoutTypeBaseline,
