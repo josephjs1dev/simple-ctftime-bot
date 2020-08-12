@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
-	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/ctftime"
+	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/clientapi/ctftime"
 	"github.com/line/line-bot-sdk-go/linebot"
 	flag "github.com/spf13/pflag"
 )

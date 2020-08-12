@@ -8,9 +8,9 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/josephsalimin/simple-ctftime-bot/internal/config"
+	httphandler "github.com/josephsalimin/simple-ctftime-bot/internal/http_handler"
 	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/ioc"
-	applog "github.com/josephsalimin/simple-ctftime-bot/internal/pkg/log"
-	"github.com/josephsalimin/simple-ctftime-bot/web/handler"
+	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/logger"
 )
 
 // Server is our server application
@@ -32,7 +32,7 @@ func (s *Server) bindImplementations() error {
 }
 
 func (s *Server) bindRoutes() {
-	lineHandler := handler.BuildLineBotHandler(s.Container)
+	lineHandler := httphandler.BuildLineBotHandler(s.Container)
 
 	s.HandleFunc("/line", lineHandler.Callback()).Methods("POST")
 	s.HandleFunc("/line", lineHandler.Index()).Methods("GET")
@@ -57,7 +57,7 @@ func (s *Server) Run() error {
 	config := s.Container.Get((*config.Config)(nil)).(*config.Config)
 	addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
 
-	applog.Infof("Listening on %v", addr)
+	logger.Infof("Listening on %v", addr)
 	return http.ListenAndServe(addr, router)
 }
 

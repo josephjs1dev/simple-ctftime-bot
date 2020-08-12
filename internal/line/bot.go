@@ -10,18 +10,18 @@ import (
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
-// AppBot is our bot implementation that contains actual line-bot-sdk-go
-type AppBot struct {
+// Bot is our bot implementation that contains actual line-bot-sdk-go
+type Bot struct {
 	client *linebot.Client
 }
 
 // ParseRequest will call line-bot-sdk-go client's ParseRequest
-func (bot *AppBot) ParseRequest(r *http.Request) ([]*linebot.Event, error) {
+func (bot *Bot) ParseRequest(r *http.Request) ([]*linebot.Event, error) {
 	return bot.client.ParseRequest(r)
 }
 
 // ReplyMessage will call line-bot-sdk-go client's ReplyMessage
-func (bot *AppBot) ReplyMessage(replyToken string, messages ...linebot.SendingMessage) domain.LineBotPushMessageCall {
+func (bot *Bot) ReplyMessage(replyToken string, messages ...linebot.SendingMessage) domain.LineBotPushMessageCall {
 	return bot.client.ReplyMessage(replyToken, messages...)
 }
 
@@ -37,5 +37,5 @@ func InitializeBot(container *ioc.Container) (domain.LineBotClient, error) {
 		return nil, err
 	}
 
-	return &AppBot{client: client}, nil
+	return &Bot{client: client}, nil
 }
