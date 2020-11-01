@@ -2,7 +2,6 @@ package ctftime
 
 import (
 	"github.com/anaskhan96/soup"
-	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
 )
 
 var currentEventTextOpts = []htmlTraversalOption{
@@ -28,11 +27,6 @@ var currentEventTitleOpts = []htmlTraversalOption{
 
 var currentEventDateOpts = []htmlTraversalOption{
 	{findType: findOneInAll, findParams: []string{"td"}, findIndex: 1},
-}
-
-var currentEventDurationOpts = []htmlTraversalOption{
-	{findType: findOneInAll, findParams: []string{"td"}, findIndex: 1},
-	{findType: findOne, findParams: []string{"small", "class", "muted pull-right"}},
 }
 
 var currentEventTeamOpts = []htmlTraversalOption{
@@ -103,9 +97,9 @@ func getCurrentEventTeam(node soup.Root) (string, error) {
 	return child[0].Text(), nil
 }
 
-// GetCurrentEvents fetch CTFTime homepage and parse HTML page there to get current running events
-func (c *Client) GetCurrentEvents() ([]domain.CTFTimeEvent, error) {
-	upcomingEvents := make([]domain.CTFTimeEvent, 0)
+// GetCurrentEvents fetch CTFTime homepage and parse HTML page there to get current running events.
+func (c *Client) GetCurrentEvents() ([]Event, error) {
+	upcomingEvents := make([]Event, 0)
 
 	body, err := c.Get(c.baseURL)
 	if err != nil {
@@ -121,7 +115,7 @@ func (c *Client) GetCurrentEvents() ([]domain.CTFTimeEvent, error) {
 	if err != nil {
 		return nil, err
 	} else if !checkCurrentEvent {
-		return nil, domain.ErrNoCurrentEvent
+		return nil, ErrNoCurrentEvent
 	}
 
 	nodes, err := requiredTraverseHTMLNode(root, currentEventsTraversalOpts)
@@ -160,7 +154,7 @@ func (c *Client) GetCurrentEvents() ([]domain.CTFTimeEvent, error) {
 			return nil, err
 		}
 
-		upcomingEvents = append(upcomingEvents, domain.CTFTimeEvent{
+		upcomingEvents = append(upcomingEvents, Event{
 			Title:    title,
 			Format:   format,
 			URL:      c.baseURL + uri,

@@ -3,18 +3,17 @@ package main
 import (
 	"log"
 
-	"github.com/josephsalimin/simple-ctftime-bot/web"
+	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/logger"
 )
 
 func main() {
-	err := web.InitAppLog()
-	if err != nil {
+	if err := logger.Init(); err != nil {
 		log.Fatalf("Failed to initialize logger, error: %v", err)
 	}
 
-	defer web.SyncAppLog()
+	defer logger.Sync()
 
-	server, err := web.CreateServer()
+	server, err := CreateServer()
 	if err != nil {
 		log.Fatalf("Failed to create server, error: %v", err)
 	}

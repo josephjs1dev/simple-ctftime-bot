@@ -2,7 +2,7 @@ package linecmd
 
 import (
 	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
-	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/clientapi/ctftime"
+	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/api/ctftime"
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 

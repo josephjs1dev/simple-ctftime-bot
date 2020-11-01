@@ -12,14 +12,13 @@ var sugared *zap.SugaredLogger
 
 // Init initialize log and sugaredLog
 // For now, let's use zap Development mode
-func Init() error {
+func Init() (err error) {
 	option := zap.AddCallerSkip(1)
-	Plain, err := zap.NewDevelopment(option)
-	if err != nil {
+	if plain, err = zap.NewDevelopment(option); err != nil {
 		return err
 	}
 
-	sugared = Plain.Sugar()
+	sugared = plain.Sugar()
 
 	return nil
 }

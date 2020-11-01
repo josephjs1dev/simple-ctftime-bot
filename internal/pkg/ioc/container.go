@@ -33,6 +33,7 @@ func (c *Container) bindInterface(label string, instance interface{}, intfType r
 	}
 
 	c.cnt[label] = instance
+
 	return nil
 }
 

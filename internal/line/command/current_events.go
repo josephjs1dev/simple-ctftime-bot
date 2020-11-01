@@ -2,7 +2,7 @@ package linecmd
 
 import (
 	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
-	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/clientapi/ctftime"
+	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/api/ctftime"
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
@@ -15,7 +15,7 @@ type CurrentEventsCommand struct {
 // Process ...
 func (c *CurrentEventsCommand) Process() ([]linebot.SendingMessage, error) {
 	currentEvents, err := c.client.GetCurrentEvents()
-	if err != nil && err != domain.ErrNoCurrentEvent {
+	if err != nil && err != ctftime.ErrNoCurrentEvent {
 		return nil, err
 	}
 

@@ -1,25 +1,16 @@
 package linecmd
 
 import (
-	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
+	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/api/ctftime"
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
 type flexDescComponent struct {
-	key     string
-	value   string
-	keySize linebot.FlexTextSizeType
+	key   string
+	value string
 }
 
-func getFlexTextSize(size linebot.FlexTextSizeType, defaultValue linebot.FlexTextSizeType) linebot.FlexTextSizeType {
-	if size == "" {
-		return defaultValue
-	}
-
-	return size
-}
-
-func buildEventBubbleContainer(event *domain.CTFTimeEvent) *linebot.BubbleContainer {
+func buildEventBubbleContainer(event *ctftime.Event) *linebot.BubbleContainer {
 	descComponents := []flexDescComponent{
 		{key: "Format", value: event.Format},
 		{key: "Date", value: event.Date},
@@ -28,6 +19,7 @@ func buildEventBubbleContainer(event *domain.CTFTimeEvent) *linebot.BubbleContai
 	}
 
 	descContents := make([]linebot.FlexComponent, 0)
+
 	for _, component := range descComponents {
 		if component.value == "" {
 			continue
@@ -54,7 +46,6 @@ func buildEventBubbleContainer(event *domain.CTFTimeEvent) *linebot.BubbleContai
 				},
 			},
 		}
-
 		descContents = append(descContents, content)
 	}
 
@@ -95,7 +86,7 @@ func buildEventBubbleContainer(event *domain.CTFTimeEvent) *linebot.BubbleContai
 	}
 }
 
-func buildTopTeamBoxContainer(team *domain.CTFTimeTeam) linebot.FlexComponent {
+func buildTopTeamBoxContainer(team *ctftime.Team) linebot.FlexComponent {
 	descComponents := []flexDescComponent{
 		{key: "Worldwide Position", value: team.WorldwidePosition},
 		{key: "Points", value: team.Points},
@@ -103,6 +94,7 @@ func buildTopTeamBoxContainer(team *domain.CTFTimeTeam) linebot.FlexComponent {
 	}
 
 	descContents := make([]linebot.FlexComponent, 0)
+
 	for _, component := range descComponents {
 		if component.value == "" {
 			continue
@@ -134,7 +126,6 @@ func buildTopTeamBoxContainer(team *domain.CTFTimeTeam) linebot.FlexComponent {
 				},
 			},
 		}
-
 		descContents = append(descContents, content)
 	}
 

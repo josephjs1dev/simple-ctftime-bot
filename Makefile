@@ -1,5 +1,10 @@
+.PHONY: test/unit_test test/all  build
 
-.PHONY: test/all test/unit_test build
+gen/go:
+	@scripts/gen.sh go
+
+lint:
+	@scripts/lint.sh
 
 test/unit_test:
 	go test ./... -v -race -covermode=atomic -cover -short

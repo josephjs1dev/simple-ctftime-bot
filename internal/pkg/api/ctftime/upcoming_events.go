@@ -2,7 +2,6 @@ package ctftime
 
 import (
 	"github.com/anaskhan96/soup"
-	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
 )
 
 var upcomingOpenEventsTraversalOpts = []htmlTraversalOption{
@@ -88,9 +87,9 @@ func getUpcomingEventTeam(node soup.Root) (string, error) {
 	return child[0].Text(), nil
 }
 
-// GetUpcomingEvents fetch CTFTime home page and parse the HTML to get upcoming events data
-func (c *Client) GetUpcomingEvents() ([]domain.CTFTimeEvent, error) {
-	upcomingEvents := make([]domain.CTFTimeEvent, 0)
+// GetUpcomingEvents fetch CTFTime home page and parse the HTML to get upcoming events data.
+func (c *Client) GetUpcomingEvents() ([]Event, error) {
+	upcomingEvents := make([]Event, 0)
 
 	body, err := c.Get(c.baseURL)
 	if err != nil {
@@ -138,7 +137,7 @@ func (c *Client) GetUpcomingEvents() ([]domain.CTFTimeEvent, error) {
 			return nil, err
 		}
 
-		upcomingEvents = append(upcomingEvents, domain.CTFTimeEvent{
+		upcomingEvents = append(upcomingEvents, Event{
 			Title:    title,
 			Format:   format,
 			URL:      c.baseURL + uri,

@@ -1,12 +1,10 @@
 package ctftime
 
 import (
-	"errors"
-
 	"github.com/anaskhan96/soup"
 )
 
-// NodeFindType is type for Find function
+// NodeFindType is type for find function.
 type NodeFindType int
 
 const (
@@ -21,18 +19,13 @@ type htmlTraversalOption struct {
 	findParams []string
 }
 
-// ErrIndexOutOfRange indicates that function can't find the node from results
-var ErrIndexOutOfRange = errors.New("error root FindAll results out of range from FindIndex")
-
-// ErrEmptyResult indicates that function returns empty node
-var ErrEmptyResult = errors.New("error empty results from FindAll")
-
 func traverseHTMLNode(root soup.Root, opts []htmlTraversalOption) ([]soup.Root, error) {
 	nodes := []soup.Root{root}
 	optSize := len(opts)
 
 	for _, opt := range opts {
 		children := []soup.Root{}
+
 		switch opt.findType {
 		case findOne:
 			for _, n := range nodes {
@@ -43,6 +36,7 @@ func traverseHTMLNode(root soup.Root, opts []htmlTraversalOption) ([]soup.Root, 
 
 				children = append(children, child)
 			}
+
 			nodes = children
 		case findAll:
 			for idx, n := range nodes {
@@ -53,6 +47,7 @@ func traverseHTMLNode(root soup.Root, opts []htmlTraversalOption) ([]soup.Root, 
 
 				children = append(children, res...)
 			}
+
 			nodes = children
 		case findOneInAll:
 			for _, n := range nodes {
@@ -63,6 +58,7 @@ func traverseHTMLNode(root soup.Root, opts []htmlTraversalOption) ([]soup.Root, 
 
 				children = append(children, res[opt.findIndex])
 			}
+
 			nodes = children
 		}
 	}

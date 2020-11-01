@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/josephsalimin/simple-ctftime-bot/internal/config"
-	mockconfig "github.com/josephsalimin/simple-ctftime-bot/internal/mock/config"
+	mockconfig "github.com/josephsalimin/simple-ctftime-bot/internal/config/mock"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -13,7 +13,7 @@ func TestReadConfig(t *testing.T) {
 	t.Run("Successfully read config", func(t *testing.T) {
 		assert := assert.New(t)
 
-		mockObj := new(mockconfig.MockReader)
+		mockObj := new(mockconfig.Reader)
 		mockObj.On("Read").Return(nil)
 		mockObj.On("Decode").Return(&config.Config{Host: "localhost", Port: 5000, ChannelSecret: "1234", ChannelToken: "1234"}, nil)
 
@@ -29,10 +29,10 @@ func TestReadConfig(t *testing.T) {
 		assert.Equal(config.ChannelToken, "1234")
 	})
 
-	t.Run("Fail to read config", func(t *testing.T) {
+	t.Run("Failed to read config", func(t *testing.T) {
 		assert := assert.New(t)
 
-		mockObj := new(mockconfig.MockReader)
+		mockObj := new(mockconfig.Reader)
 		mockObj.On("Read").Return(fmt.Errorf("Error Read"))
 		mockObj.On("Decode").Return(nil, fmt.Errorf("Error Decode"))
 
@@ -48,7 +48,7 @@ func TestReadConfig(t *testing.T) {
 	t.Run("Failed to decode config", func(t *testing.T) {
 		assert := assert.New(t)
 
-		mockObj := new(mockconfig.MockReader)
+		mockObj := new(mockconfig.Reader)
 		mockObj.On("Read").Return(nil)
 		mockObj.On("Decode").Return(nil, fmt.Errorf("Error Decode"))
 

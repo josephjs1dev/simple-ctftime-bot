@@ -1,0 +1,16 @@
+run:
+  deadline: 3m
+  skip-dirs:
+    - mock
+  skip-files:
+    - ".*_test.go"
+
+linters:
+  enable:
+    - wsl
+    - golint
+    - govet
+    - gocyclo
+    - lll
+  disable:
+    - errcheck

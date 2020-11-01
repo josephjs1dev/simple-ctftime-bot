@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
-	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/clientapi/ctftime"
+	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/api/ctftime"
 	"github.com/line/line-bot-sdk-go/linebot"
 	flag "github.com/spf13/pflag"
 )
@@ -75,7 +75,7 @@ func buildTopTeamsCommand(parameter []string) domain.LineCommand {
 
 	cmd.fs.IntVarP(&cmd.flagParams.year, "year", "y", time.Now().Year(), "top teams in chosen year")
 	cmd.fs.StringVarP(&cmd.flagParams.country, "country", "c", "", "top teams in chosen country (empty is worlwide)")
-	cmd.fs.Parse(parameter)
+	_ = cmd.fs.Parse(parameter)
 
 	return cmd
 }

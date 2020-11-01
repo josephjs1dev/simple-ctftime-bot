@@ -25,12 +25,10 @@ func configHook(f reflect.Type, t reflect.Type, data interface{}) (interface{}, 
 }
 
 // Read utilizes godotenv Read to read the environment
-func (r *EnvReader) Read() error {
+func (r *EnvReader) Read() (err error) {
 	var envData map[string]string
-	var err error
 
 	envData, err = godotenv.Read(r.EnvFiles...)
-
 	r.env = envData
 
 	return err
@@ -40,6 +38,7 @@ func (r *EnvReader) Read() error {
 func (r *EnvReader) Decode() (*Config, error) {
 	config := Config{}
 	dc := &mapstructure.DecoderConfig{Result: &config, DecodeHook: configHook}
+
 	decoder, err := mapstructure.NewDecoder(dc)
 	if err != nil {
 		return nil, err

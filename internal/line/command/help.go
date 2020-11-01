@@ -12,6 +12,7 @@ type HelpCommand struct {
 
 // Process ...
 func (c *HelpCommand) Process() ([]linebot.SendingMessage, error) {
+	commandContents := make([]linebot.FlexComponent, 0)
 	commandMap := map[string]string{
 		"!help":            "to get commands usage",
 		"!upcoming_events": "to get upcoming CTFTime events",
@@ -19,7 +20,6 @@ func (c *HelpCommand) Process() ([]linebot.SendingMessage, error) {
 		"!top_teams":       "to get top teams, can add parameter -c <country_id> -y <year>",
 	}
 
-	commandContents := make([]linebot.FlexComponent, 0)
 	for key := range commandMap {
 		content := &linebot.BoxComponent{
 			Type:    linebot.FlexComponentTypeBox,
@@ -56,7 +56,6 @@ func (c *HelpCommand) Process() ([]linebot.SendingMessage, error) {
 				},
 			},
 		}
-
 		commandContents = append(commandContents, content)
 	}
 
@@ -81,7 +80,6 @@ func (c *HelpCommand) Process() ([]linebot.SendingMessage, error) {
 			},
 		},
 	}
-
 	messages := []linebot.SendingMessage{linebot.NewFlexMessage("Commands Usage", contents)}
 
 	return messages, nil

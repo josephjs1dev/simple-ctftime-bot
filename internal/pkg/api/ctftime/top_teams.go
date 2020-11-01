@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/anaskhan96/soup"
-	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
 )
 
 var topTeamsTraversalOpts = []htmlTraversalOption{
@@ -95,8 +94,8 @@ func getTopTeamEvents(node soup.Root, isWorld bool) (string, error) {
 }
 
 // GetTopTeams fetches top team page from CTFTime and parse the HTML to get the value for top team
-func (c *Client) GetTopTeams(year int, country string, total int) ([]domain.CTFTimeTeam, error) {
-	topTeams := make([]domain.CTFTimeTeam, 0)
+func (c *Client) GetTopTeams(year int, country string, total int) ([]Team, error) {
+	topTeams := make([]Team, 0)
 
 	body, err := c.Get(fmt.Sprintf("%v/stats/%v/%v", c.baseURL, year, country))
 	if err != nil {
@@ -121,6 +120,7 @@ func (c *Client) GetTopTeams(year int, country string, total int) ([]domain.CTFT
 	}
 
 	isWorld := country == ""
+
 	for i := 1; i <= size; i++ {
 		worldwidePosition, err := getTopTeamWorldwidePosition(nodes[i])
 		if err != nil {
@@ -142,7 +142,7 @@ func (c *Client) GetTopTeams(year int, country string, total int) ([]domain.CTFT
 			return nil, err
 		}
 
-		topTeams = append(topTeams, domain.CTFTimeTeam{
+		topTeams = append(topTeams, Team{
 			WorldwidePosition: worldwidePosition,
 			Name:              name,
 			Points:            points,

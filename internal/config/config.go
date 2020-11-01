@@ -9,6 +9,7 @@ type Config struct {
 }
 
 // Reader is interface for global application config
+//go:generate mockery --name=Reader --outpkg=mock --output=mock
 type Reader interface {
 	Read() error
 	Decode() (*Config, error)

@@ -1,4 +1,4 @@
-package web
+package main
 
 import (
 	"fmt"
@@ -58,6 +58,7 @@ func (s *Server) Run() error {
 	addr := fmt.Sprintf("%s:%d", config.Host, config.Port)
 
 	logger.Infof("Listening on %v", addr)
+
 	return http.ListenAndServe(addr, router)
 }
 

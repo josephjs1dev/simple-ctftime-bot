@@ -1,4 +1,4 @@
-package web
+package main
 
 import (
 	"github.com/josephsalimin/simple-ctftime-bot/internal/domain"
@@ -6,7 +6,6 @@ import (
 	linecmd "github.com/josephsalimin/simple-ctftime-bot/internal/line/command"
 	lineservice "github.com/josephsalimin/simple-ctftime-bot/internal/line/service"
 	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/ioc"
-	"github.com/josephsalimin/simple-ctftime-bot/internal/pkg/logger"
 )
 
 type implementationBinder func(*ioc.Container) error
@@ -34,14 +33,4 @@ var binders []implementationBinder = []implementationBinder{
 	bindLineBot,
 	bindLineCmd,
 	bindLineService,
-}
-
-// InitAppLog initializes app logger
-func InitAppLog() error {
-	return logger.Init()
-}
-
-// SyncAppLog sync app log
-func SyncAppLog() {
-	defer logger.Sync()
 }
